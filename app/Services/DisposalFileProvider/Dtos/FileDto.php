@@ -9,7 +9,7 @@ class FileDto
 {
     public function __construct(
         /** Url to the file. */
-        public string $href,
+        public string $url,
     ) {
     }
 }
