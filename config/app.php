@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'smsapi_pl' => [
+        'api_key' => env('SMSAPI_PL_API_KEY'),
+    ],
+
 ];

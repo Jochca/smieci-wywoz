@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Services\GoogleDriveFileDownloader;
+namespace App\Services\GoogleDriveFileDownloader\Concrete;
 
+use App\Services\GoogleDriveFileDownloader\IGoogleDriveFileDownloader;
 use GuzzleHttp\Client;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 /**
- * Service for downloading files from Google Drive.
+ * Implementation of service for downloading files from Google Drive.
  */
-class GoogleDriveFileDownloader
+class GoogleDriveFileDownloader implements IGoogleDriveFileDownloader
 {
     public function __construct(
         protected Client $client,
@@ -32,7 +33,7 @@ class GoogleDriveFileDownloader
     }
 
     /** Extracts file ID from a Google Drive URL. */
-    public function getFileId(string $fileUrl): string
+    protected function getFileId(string $fileUrl): string
     {
         $fileIdRegex = '/\/file\/d\/([^\/]+)/';
         $matches = [];
@@ -47,7 +48,7 @@ class GoogleDriveFileDownloader
     }
 
     /** Returns download url from file ID. */
-    public function getDownloadUrl(string $fileId): string
+    protected function getDownloadUrl(string $fileId): string
     {
         return "https://drive.google.com/uc?export=download&id=$fileId";
     }

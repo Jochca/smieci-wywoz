@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Services\FileDeduplicator;
+namespace App\Services\FileDeduplicator\Concrete;
 
 use App\Models\ProcessedFile;
+use App\Services\FileDeduplicator\IFileDeduplicator;
 use Illuminate\Support\Collection;
 
 /**
- * Service which aids resource saving by keeping track of files that were already processed
- * and avoiding processing them again.
+ * Implementation of service which aids resource saving by keeping track of files 
+ * that were already processed and avoiding processing them again.
  */
-class FileDeduplicator
+class FileDeduplicator implements IFileDeduplicator
 {
     /** Marks file as processed. */
     public function markFileAsProcessed(string $file): void
