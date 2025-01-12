@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('disposals', function (Blueprint $table) {
+            $table->id();
+            $table->enum('type', [
+                'mixed',
+                'bio',
+                'ash',
+                'recyclable',
+                'green'
+            ]);
+            $table->date('date');
+            $table->foreignId('town_id')->constrained();
+            $table->foreignId('town_street_id')->constrained();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('disposals');
+    }
+};
