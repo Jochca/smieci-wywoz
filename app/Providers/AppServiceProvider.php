@@ -12,6 +12,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->bind(
+            \App\Services\DisposalFileProvider\IDisposalFileProvider::class,
+            \App\Services\DisposalFileProvider\Concrete\WebScrappingDisposalFileProvider::class
+        );
     }
 
     /**
