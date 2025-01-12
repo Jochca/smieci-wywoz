@@ -13,6 +13,7 @@
         "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "spatie/temporary-directory": "^2.2",
         "symfony/css-selector": "^7.2",
         "symfony/dom-crawler": "^7.2"
     },
