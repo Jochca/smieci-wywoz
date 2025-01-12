@@ -27,5 +27,5 @@ interface IUserAuthenticationService
     public function cleanup(): void;
 
     /** Generate random SMS authentication code. */
-    protected function generateCode(): string;
+    public function generateCode(): string;
 }

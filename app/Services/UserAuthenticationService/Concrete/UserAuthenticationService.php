@@ -88,7 +88,7 @@ class UserAuthenticationService implements IUserAuthenticationService
     }
 
     /** Generate random SMS authentication code. */
-    protected function generateCode(): string
+    public function generateCode(): string
     {
         $lowerBound = 0;
         $upperBound = 10 ** self::SMS_AUTHENTICATION_CODE_LENGTH - 1;
