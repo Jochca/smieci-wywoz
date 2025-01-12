@@ -25,7 +25,7 @@ class WebScrappingDisposalFileProvider implements IDisposalFileProvider
      * 
      * @return \Illuminate\Support\Collection<DistrictDto>
      */
-    public function getFiles(): Collection
+    public function getDistrictsWithFiles(): Collection
     {
         $districts = $this->scrapeAvailableDistricts();
 

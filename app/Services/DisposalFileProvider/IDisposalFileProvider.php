@@ -15,5 +15,5 @@ interface IDisposalFileProvider
      * 
      * @return \Illuminate\Support\Collection<DistrictDto>
      */
-    public function getFiles(): Collection;
+    public function getDistrictsWithFiles(): Collection;
 }
