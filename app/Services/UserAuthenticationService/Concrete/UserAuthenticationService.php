@@ -2,6 +2,7 @@
 
 namespace App\Services\UserAuthenticationService\Concrete;
 
+use App\Models\SmsAuthenticationCode;
 use App\Models\User;
 use App\Services\SmsDeliveryService\ISmsDeliveryService;
 use App\Services\UserAuthenticationService\IUserAuthenticationService;
@@ -76,6 +77,14 @@ class UserAuthenticationService implements IUserAuthenticationService
         call_user_func($action, $user);
 
         $smsAuthenticationCode->delete();
+    }
+
+    /** Cleans up any expired SMS authentication codes. */
+    public function cleanup(): void
+    {
+        SmsAuthenticationCode::query()
+            ->where("expires_at", "<", Carbon::now())
+            ->delete();
     }
 
     /** Generate random SMS authentication code. */

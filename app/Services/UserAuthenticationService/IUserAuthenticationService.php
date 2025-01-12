@@ -23,6 +23,9 @@ interface IUserAuthenticationService
      */
     public function executeAction(User $user, string $code): void;
 
+    /** Cleans up any expired SMS authentication codes. */
+    public function cleanup(): void;
+
     /** Generate random SMS authentication code. */
     protected function generateCode(): string;
 }
