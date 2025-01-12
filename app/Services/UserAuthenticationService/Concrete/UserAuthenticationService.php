@@ -45,15 +45,10 @@ class UserAuthenticationService implements IUserAuthenticationService
     /** Verify given SMS authentication code for given user. */
     public function verify(User $user, string $code): bool
     {
-        $smsAuthenticationCode = $user->smsAuthenticationCodes()
+        return $user->smsAuthenticationCodes()
             ->where("code", $code)
-            ->first();
-
-        if ($smsAuthenticationCode === null) {
-            return false;
-        }
-
-        return true;
+            ->where("expires_at", ">", Carbon::now())
+            ->exists();
     }
 
     /**
@@ -65,6 +60,7 @@ class UserAuthenticationService implements IUserAuthenticationService
     {
         $smsAuthenticationCode = $user->smsAuthenticationCodes()
             ->where("code", $code)
+            ->where("expires_at", ">", Carbon::now())
             ->first();
 
         if ($smsAuthenticationCode === null) {
