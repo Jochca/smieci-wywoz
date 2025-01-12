@@ -112,8 +112,13 @@ class WebScrappingDisposalFileProvider implements IDisposalFileProvider
      */
     protected function extractFilesFromTable(Crawler $table): Collection
     {
+        // If there is an error that someone put table inside table, we need to filter it out. It will be caught later.
+        if ($table->filter("table table")->count() > 0) {
+            return collect([]);
+        }
+
         $linksList = $table
-            ->filter("tr a")
+            ->filter("td a")
             ->each(fn($node) => $node->attr("href"));
 
         return collect($linksList);
