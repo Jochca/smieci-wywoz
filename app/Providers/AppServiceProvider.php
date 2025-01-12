@@ -30,10 +30,25 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\SmsDeliveryService\ISmsDeliveryService::class,
             \App\Services\SmsDeliveryService\Concrete\SmsApiSmsDeliveryService::class
         );
-        //
+
         $this->app->bind(
             \App\Services\DisposalFileProvider\IDisposalFileProvider::class,
             \App\Services\DisposalFileProvider\Concrete\WebScrappingDisposalFileProvider::class
+        );
+
+        $this->app->bind(
+            \App\Services\GoogleDriveFileDownloader\IGoogleDriveFileDownloader::class,
+            \App\Services\GoogleDriveFileDownloader\Concrete\GoogleDriveFileDownloader::class
+        );
+
+        $this->app->bind(
+            \App\Services\FileDeduplicator\IFileDeduplicator::class,
+            \App\Services\FileDeduplicator\Concrete\FileDeduplicator::class
+        );
+
+        $this->app->bind(
+            \App\Services\UserAuthenticationService\IUserAuthenticationService::class,
+            \App\Services\UserAuthenticationService\Concrete\UserAuthenticationService::class
         );
     }
 

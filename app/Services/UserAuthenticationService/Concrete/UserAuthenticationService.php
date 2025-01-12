@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Services\UserAuthenticationService;
+namespace App\Services\UserAuthenticationService\Concrete;
 
 use App\Models\User;
 use App\Services\SmsDeliveryService\ISmsDeliveryService;
+use App\Services\UserAuthenticationService\IUserAuthenticationService;
 use Carbon\Carbon;
 
-class UserAuthenticationService
+class UserAuthenticationService implements IUserAuthenticationService
 {
     /** Length of Sms Authentication code. */
     public const int SMS_AUTHENTICATION_CODE_LENGTH = 5;
