@@ -2,6 +2,7 @@
 
 namespace App\Services\UserAuthenticationService\Concrete;
 
+use App\Models\SmsAuthenticationCode;
 use App\Models\User;
 use App\Services\SmsDeliveryService\ISmsDeliveryService;
 use App\Services\UserAuthenticationService\IUserAuthenticationService;
@@ -45,15 +46,10 @@ class UserAuthenticationService implements IUserAuthenticationService
     /** Verify given SMS authentication code for given user. */
     public function verify(User $user, string $code): bool
     {
-        $smsAuthenticationCode = $user->smsAuthenticationCodes()
+        return $user->smsAuthenticationCodes()
             ->where("code", $code)
-            ->first();
-
-        if ($smsAuthenticationCode === null) {
-            return false;
-        }
-
-        return true;
+            ->where("expires_at", ">", Carbon::now())
+            ->exists();
     }
 
     /**
@@ -65,6 +61,7 @@ class UserAuthenticationService implements IUserAuthenticationService
     {
         $smsAuthenticationCode = $user->smsAuthenticationCodes()
             ->where("code", $code)
+            ->where("expires_at", ">", Carbon::now())
             ->first();
 
         if ($smsAuthenticationCode === null) {
@@ -82,8 +79,16 @@ class UserAuthenticationService implements IUserAuthenticationService
         $smsAuthenticationCode->delete();
     }
 
+    /** Cleans up any expired SMS authentication codes. */
+    public function cleanup(): void
+    {
+        SmsAuthenticationCode::query()
+            ->where("expires_at", "<", Carbon::now())
+            ->delete();
+    }
+
     /** Generate random SMS authentication code. */
-    protected function generateCode(): string
+    public function generateCode(): string
     {
         $lowerBound = 0;
         $upperBound = 10 ** self::SMS_AUTHENTICATION_CODE_LENGTH - 1;
