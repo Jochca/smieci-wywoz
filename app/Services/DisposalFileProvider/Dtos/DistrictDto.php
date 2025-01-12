@@ -11,7 +11,7 @@ class DistrictDto
         public string $name,
 
         /** @var Collection<FileDto> Files that describe schedules in district. */
-        public Collection $towns,
+        public Collection $files,
     ) {
     }
 }
