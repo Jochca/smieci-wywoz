@@ -1,18 +1,22 @@
 <?php
 
-namespace App\Services\GPT;
+namespace App\Services\DisposalScheduleProvider\Concrete;
 
+use App\Services\DisposalScheduleProvider\DTOs\DisposalScheduleDTO;
+use App\Services\DisposalScheduleProvider\Interfaces\IDisposalScheduleProvider;
 use OpenAI\Client;
+use OpenAI\Transporters\HttpTransporter;
 
-class AgregatorService
+class GPTScheduleProvider implements IDisposalScheduleProvider
 {
-    public function __construct(
-        private Client $openAI
-    )
+    private Client $client;
+
+    public function __construct(Client $client)
     {
+        $this->client = $client;
     }
 
-    public function harvest($data)
+    public function extract(string $data) : DisposalScheduleDTO
     {
         $messages = [
             [
@@ -35,23 +39,23 @@ class AgregatorService
                         },
                         "Waste_Types": [
                           {
-                            "Type": "Mixed Municipal Waste",
+                            "Type": "mixed",
                             "Dates": ["2025-01-03", "2025-01-21", "..."]
                           },
                           {
-                            "Type": "Biodegradable Waste",
+                            "Type": "bio",
                             "Dates": ["2025-01-14", "2025-01-28", "..."]
                           },
                           {
-                            "Type": "Ash",
+                            "Type": "ash",
                             "Dates": ["2025-01-14", "2025-01-28", "..."]
                           },
                           {
-                            "Type": "Glass, Paper, Plastics, Metals",
+                            "Type": "recyclable",
                             "Dates": ["2025-01-09", "..."]
                           },
                           {
-                            "Type": "Green Waste",
+                            "Type": "green",
                             "Dates": ["2025-01-28", "..."]
                           }
                         ],
@@ -71,12 +75,13 @@ class AgregatorService
                        - Glass, Paper, Plastics, Metals,
                        - Green Waste.
                     3. Dates in each cell correspond to collection days within the given month.
-                    4. Combine the month with the days to form complete dates in YYYY-MM-DD format.
+                    4. Combine the month with the days to form complete dates in YYYY-MM-DD format. Check if date is correct (e.g., February 30th).
+                    5. If there is data about other types of waste, omit them.
                     '.$data
             ],
         ];
 
-        $response = $this->openAI->chat()->create([
+        $response = $this->client->chat()->create([
             'model' => 'gpt-3.5-turbo',
             'messages' => $messages,
             'max_tokens' => 1500,
@@ -85,6 +90,10 @@ class AgregatorService
 
         $content =  $response['choices'][0]['message']['content'];
 
-        return json_decode($content, true);
+        if(!json_decode($content)) {
+            throw new \Exception('Invalid JSON format');
+        }
+
+        return DisposalScheduleDTO::fromArray(json_decode($content, true));
     }
 }

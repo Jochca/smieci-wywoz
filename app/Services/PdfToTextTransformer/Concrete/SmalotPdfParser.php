@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services\PDF;
+namespace App\Services\PdfToTextTransformer\Concrete;
 
+use App\Services\PdfToTextTransformer\Interfaces\IPdfToTextConverter;
 use Smalot\PdfParser\Parser as PdfParser;
 
-class PdfToTxtService
+class SmalotPdfParser implements IPdfToTextConverter
 {
     protected PdfParser $pdfParser;
 
@@ -13,14 +14,7 @@ class PdfToTxtService
         $this->pdfParser = new PdfParser();
     }
 
-    /**
-     * Convert PDF file to plain text.
-     *
-     * @param string $filePath
-     * @return string
-     * @throws \Exception
-     */
-    public function convertToText(string $filePath): string
+    public function convert(string $filePath): string
     {
         if (!file_exists($filePath)) {
             throw new \Exception("File not found: {$filePath}");

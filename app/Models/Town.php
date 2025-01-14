@@ -10,6 +10,7 @@ class Town extends Model
 
     protected $fillable = [
         'name',
+        'district_id',
     ];
 
 }
