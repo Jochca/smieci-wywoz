@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             \App\Services\SmsDeliveryService\ISmsDeliveryService::class,
-            \App\Services\SmsDeliveryService\Concrete\SmsApiSmsDeliveryService::class
+            \App\Services\SmsDeliveryService\Concrete\AwsSnsSmsDeliveryService::class
         );
 
         $this->app->bind(
